@@ -261,7 +261,7 @@ def updateSnakePositions():
 						if x == i:
 							continue
 						else:
-							deathOrder.append(arrayOfSnakes[i]+playerNum)
+							deathOrder.append(arrayOfSnakes[x]+arrayOfSnakes[x].playerNum)
 							arrayOfSnakes[x].kill()
 					arrayOfSnakes[i].kill()
 				else:
