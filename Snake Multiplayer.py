@@ -2,6 +2,7 @@ from tkinter import *
 from time import *
 from random import *
 
+#Initialize all of the game's variables
 def setInitialVariables():
 	global screenWidth, screenHeight, buttonChoice, arrayOfSnakes, gameRunning, playerColoursArray, apple, deadSnakes, deathOrder, winner, tie, scoreText
 	
@@ -22,7 +23,10 @@ def setInitialVariables():
 	scoreText = None
 	deadSnakes = None
 
+#Class for the snakes
 class Snake(object):
+
+	#Initialize the snake's variables and position
 	def __init__(self, playerNum, totalPlayers):
 		self.snakeArray = [None]*50
 		self.snakeParts = [None]*50
@@ -53,6 +57,7 @@ class Snake(object):
 			else:
 				self.snakeArray[0] = [(playerNum-1)*screenWidth/3-7, 2*screenHeight/3-7]
 
+	#Move and update the snake's position based on its current direction
 	def updatePosition(self):
 		self.lastDirection = self.direction
 		if self.direction == 'Up':
@@ -89,6 +94,7 @@ class Snake(object):
 			
 			self.snakeArray[0] = [self.snakeArray[0][0]+self.speed, self.snakeArray[0][1]]
 
+	#Procedure for drawing the snake
 	def draw(self):
 		for i in range(len(self.snakeArray)):
 			if self.snakeArray[i] == None:
@@ -105,8 +111,10 @@ class Snake(object):
 		
 		self.snakeLabel = screen.create_text(self.snakeArray[0], text=str(self.playerNum), font=('Times New Roman', self.halfPieceSize*2), anchor='center')
 
+	#Procedure to check if the snake is dead
 	def checkDeath(self):
-		#check if any of the snake has run into the wall
+
+		#Check if the snake has run into the wall
 		if self.snakeArray[0][0] - self.halfPieceSize < 0 or self.snakeArray[0][0] + self.halfPieceSize > screenWidth:
 			self.alive = False
 			deathOrder.append(self.playerNum)
@@ -114,6 +122,7 @@ class Snake(object):
 			self.alive = False
 			deathOrder.append(self.playerNum)
 
+		#Check if the snake has run into itself
 		if self.snakeArray[0] in self.snakeArray[2:]:
 			self.alive = False
 			deathOrder.append(self.playerNum)
@@ -121,6 +130,7 @@ class Snake(object):
 		if not self.alive:
 			self.kill()
 
+	#Procedure to kill the snake and delete its parts
 	def kill(self):
 		self.alive = False
 		for i in range(len(self.snakeArray)):
@@ -130,6 +140,7 @@ class Snake(object):
 				screen.delete(self.snakeParts[i])
 		screen.delete(self.snakeLabel)
 
+	#Function to check if a snake has collided with another snake
 	def checkOtherSnakeCollision(self, otherSnake):
 		if self.snakeArray[0] in otherSnake.snakeArray[1:]:
 			self.alive = False
@@ -155,13 +166,17 @@ class Snake(object):
 		if not otherSnake.alive:
 			otherSnake.kill()
 
+	#Procedure to check if the snake has run into an apple
 	def checkAppleCollision(self):
 		if self.snakeArray[0] == apple.position:
 			apple.beenHit()
 			newSnakeIndex = self.snakeArray.index(None)
 			self.snakeArray[newSnakeIndex] = self.snakeArray[newSnakeIndex-1]
 
+#Class for the apple
 class Apple(object):
+
+	#Initialize the apple's variables and position
 	def __init__(self):
 		randomCoefficientX = randint(0,30)
 		randomCoefficientY = randint(0,24)
@@ -174,11 +189,13 @@ class Apple(object):
 		self.position = [screenWidth/2 + (14*randomCoefficientX*randomNegativeX)-7, screenHeight/2 + (14*randomCoefficientY*randomNegativeY)-7]
 		self.apple = None
 
+	#Procedure for drawing the apple
 	def draw(self):
 		screen.delete(self.apple)
-		self.apple = screen.create_rectangle(self.position[0]-7, self.position[1]-7, self.position[0]+7, self.position[1]+7, fill='orange')#screen.create_image(image=appleImage)
+		self.apple = screen.create_rectangle(self.position[0]-7, self.position[1]-7, self.position[0]+7, self.position[1]+7, fill='orange')		#screen.create_image(image=appleImage)
 		screen.update()
 
+	#Procedure called when the apple is hit
 	def beenHit(self):
 		randomCoefficientX = randint(0,30)
 		randomCoefficientY = randint(0,24)
@@ -191,10 +208,7 @@ class Apple(object):
 		self.position = [screenWidth/2 + (14*randomCoefficientX*randomNegativeX)-7, screenHeight/2 + (14*randomCoefficientY*randomNegativeY)-7]
 		self.draw()
 
-	def checkAppleCollision(self):
-		if self.snakeArray[0] == apple.position:
-			apple.beenHit()
-
+#Procedure for creating the menu screen for player selection
 def menuScreen():
 	global buttonChoice, onePlayerButton, twoPlayerButton, threePlayerButton, fourPlayerButton
 	onePlayerButton = Button(screen, text='1  Player', font=('Courier', 18), command=buttonSet1)
@@ -207,26 +221,28 @@ def menuScreen():
 	threePlayerButton.place(x=screenWidth/3, y=2*screenHeight/3, anchor='center')
 	fourPlayerButton.place(x=2*screenWidth/3, y=2*screenHeight/3, anchor='center')
 
+#Button events
 def buttonSet1():
 	global buttonChoice
 	buttonChoice = 1
-	startGame()
+	runGame()
 
 def buttonSet2():
 	global buttonChoice
 	buttonChoice = 2
-	startGame()
+	runGame()
 
 def buttonSet3():
 	global buttonChoice
 	buttonChoice = 3
-	startGame()
+	runGame()
 
 def buttonSet4():
 	global buttonChoice
 	buttonChoice = 4
-	startGame()
+	runGame()
 
+#Procedure for updating all of the snake's positions
 def updateSnakePositions():
 	global deadSnakes, scoreText
 	if scoreText:
@@ -264,6 +280,7 @@ def updateSnakePositions():
 		scoreText = screen.create_text(screenWidth/2, 50, text=arrayOfSnakes[0].snakeArray.index(None), font=('Times New Roman', 20))
 	screen.update()
 	
+#Procedure for checking for collisions between snakes
 def checkSnakeCollisions():
 	for i in range(len(arrayOfSnakes)):
 		for x in range(len(arrayOfSnakes)):
@@ -271,6 +288,7 @@ def checkSnakeCollisions():
 				continue
 			arrayOfSnakes[i].checkOtherSnakeCollision(arrayOfSnakes[x])
 
+#Procedure for checking the state of a multiplayer snake game
 def checkGameState():
 	global deadSnakes, arrayOfSnakes, deathOrder, gameRunning, winner, tie
 	if len(deathOrder) == len(arrayOfSnakes)-1:
@@ -280,6 +298,7 @@ def checkGameState():
 		gameRunning = False
 		tie = True
 
+#Procedure for creating the game over message (multiplayer)
 def gameOverMessage():
 	global deadSnakes, arrayOfSnakes, deathOrder
 	for i in range(len(arrayOfSnakes)):
@@ -295,12 +314,14 @@ def gameOverMessage():
 		tiedPlayers = 'Player ' + str(min(deathOrder[-1], deathOrder[-2])) + ', and Player ' + str(max(deathOrder[-1], deathOrder[-2]))
 		screen.create_text(screenWidth/2, screenHeight/2, font=("Courier", 18), text='This game\'s winners are: ' + tiedPlayers + '!')
 
+#Procedure for creating the game over message (single player)
 def onePlayerGameOver():
 	arrayOfSnakes[0].kill()
 	screen.delete(scoreText)
 	screen.delete(apple.apple)
 	screen.create_text(screenWidth/2, screenHeight/2, font=("Courier", 18) ,text='Game Over!\nYour score is: ' + str(arrayOfSnakes[0].snakeArray.index(None)))
 
+#Procedure for the count down before the game begins
 def countDown():
 	global count
 	count = None
@@ -312,8 +333,8 @@ def countDown():
 	screen.delete(count)
 	count = screen.create_text(screenWidth/2, 50, text='GO!', font=('Times New Roman', 20), anchor='center')
 
-
-def startGame():
+#Game's main procedure, responsible for running all of the game's methods
+def runGame():
 	global count, goTimer
 	killButtons()
 	createSnakes()
@@ -339,14 +360,17 @@ def startGame():
 			sleep(0.05)
 		onePlayerGameOver()
 
+#Quits the game
 def quitGame():
 	master.destroy()
 
+#Creates snakes
 def createSnakes():
 	for i in range(1, buttonChoice+1):
 		arrayOfSnakes.append(Snake(i, buttonChoice))
 		arrayOfSnakes[i-1].draw()
 
+#Destroys buttons
 def killButtons():
 	global onePlayerButton, twoPlayerButton, threePlayerButton, fourPlayerButton
 	onePlayerButton.destroy()
@@ -354,6 +378,8 @@ def killButtons():
 	threePlayerButton.destroy()
 	fourPlayerButton.destroy()
 
+
+#Handles key press events
 def keyPressHandler(event):
 	if event.keysym == 'Escape':
 		quitGame()
@@ -433,20 +459,18 @@ def keyPressHandler(event):
 # 	print (event.x, event.y)
 
 
-
+#Initializes the game's variables
 setInitialVariables()
 
+#Initializes the tkinter object and canvas
 master = Tk()
 master.bind('<Key>', keyPressHandler)
 master.wm_title('Multiplayer Snake Battle')
 #master.bind('<1>', mouseClicker)
-
 screen = Canvas(master, width=screenWidth, height=screenHeight)
-
 screen.pack()
-
 screen.focus_set()
 
-
+#Starts the menu screen after 0.5 seconds and then runs the screen until infinity (or the window is closed)
 master.after(500, menuScreen())
 screen.mainloop()
