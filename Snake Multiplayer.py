@@ -237,6 +237,22 @@ def updateSnakePositions():
 	for i in range(len(arrayOfSnakes)):
 		if arrayOfSnakes[i].alive:
 			arrayOfSnakes[i].checkAppleCollision()
+
+			if not None in arrayOfSnakes[i].snakeArray:
+				if len(arrayOfSnakes) > 1:
+					otherSnakes = []
+					for x in range(len(arrayOfSnakes)):
+						if x == i:
+							continue
+						else:
+							deathOrder.append(arrayOfSnakes[i]+playerNum)
+							arrayOfSnakes[x].kill()
+					arrayOfSnakes[i].kill()
+				else:
+					for w in range(50):
+						arrayOfSnakes[i].snakeArray.append(None)
+						arrayOfSnakes[i].snakeParts.append(None)
+
 			arrayOfSnakes[i].checkDeath()
 			arrayOfSnakes[i].updatePosition()
 			arrayOfSnakes[i].draw()
