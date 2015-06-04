@@ -364,20 +364,21 @@ def keyPressHandler(event):
 # def mouseClicker(event):
 # 	print (event.x, event.y)
 
+def playATronGame():
+	global screen
+	#Initializes the game's variables
+	setInitialVariables()
 
-#Initializes the game's variables
-setInitialVariables()
+	#Initializes the tkinter object and canvas
+	master = Tk()
+	master.bind('<Key>', keyPressHandler)
+	master.wm_title('Multiplayer Tron Battle')
+	#master.bind('<1>', mouseClicker)
+	screen = Canvas(master, width=screenWidth, height=screenHeight)
+	screen.pack()
 
-#Initializes the tkinter object and canvas
-master = Tk()
-master.bind('<Key>', keyPressHandler)
-master.wm_title('Multiplayer Bike Battle')
-#master.bind('<1>', mouseClicker)
-screen = Canvas(master, width=screenWidth, height=screenHeight)
-screen.pack()
+	screen.focus_set()
 
-screen.focus_set()
-
-#Starts the menu screen after 0.5 seconds and then runs the screen until infinity (or the window is closed)
-master.after(500, menuScreen())
-screen.mainloop()
+	#Starts the menu screen after 0.5 seconds and then runs the screen until infinity (or the window is closed)
+	master.after(500, menuScreen())
+	screen.mainloop()
