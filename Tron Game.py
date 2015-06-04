@@ -56,36 +56,36 @@ class Bike(object):
 		self.bikeArray.append(None)
 		self.bikeParts.append(None)
 		self.lastDirection = self.direction
-
-		if self.direction == 'Up':
-			for i in range(len(self.bikeArray)):
-				x = len(self.bikeArray)-i-1
-				if x:
-					self.bikeArray[x] = self.bikeArray[x-1]
-			self.bikeArray[0] = [self.bikeArray[0][0], self.bikeArray[0][1]-self.speed]
-		
-		elif self.direction == 'Down':
-			for i in range(len(self.bikeArray)):
-				x = len(self.bikeArray)-i-1
-				if x:
-					self.bikeArray[x] = self.bikeArray[x-1]
-			self.bikeArray[0] = [self.bikeArray[0][0], self.bikeArray[0][1]+self.speed]
-		
-		elif self.direction == 'Left':
-			for i in range(len(self.bikeArray)):
-				x = len(self.bikeArray)-i-1
-				if x:
-					self.bikeArray[x] = self.bikeArray[x-1]
+		if self.alive:
+			if self.direction == 'Up':
+				for i in range(len(self.bikeArray)):
+					x = len(self.bikeArray)-i-1
+					if x:
+						self.bikeArray[x] = self.bikeArray[x-1]
+				self.bikeArray[0] = [self.bikeArray[0][0], self.bikeArray[0][1]-self.speed]
 			
-			self.bikeArray[0] = [self.bikeArray[0][0]-self.speed, self.bikeArray[0][1]]
-		
-		elif self.direction == 'Right':
-			for i in range(len(self.bikeArray)):
-				x = len(self.bikeArray)-i-1
-				if x:
-					self.bikeArray[x] = self.bikeArray[x-1]
+			elif self.direction == 'Down':
+				for i in range(len(self.bikeArray)):
+					x = len(self.bikeArray)-i-1
+					if x:
+						self.bikeArray[x] = self.bikeArray[x-1]
+				self.bikeArray[0] = [self.bikeArray[0][0], self.bikeArray[0][1]+self.speed]
 			
-			self.bikeArray[0] = [self.bikeArray[0][0]+self.speed, self.bikeArray[0][1]]
+			elif self.direction == 'Left':
+				for i in range(len(self.bikeArray)):
+					x = len(self.bikeArray)-i-1
+					if x:
+						self.bikeArray[x] = self.bikeArray[x-1]
+				
+				self.bikeArray[0] = [self.bikeArray[0][0]-self.speed, self.bikeArray[0][1]]
+			
+			elif self.direction == 'Right':
+				for i in range(len(self.bikeArray)):
+					x = len(self.bikeArray)-i-1
+					if x:
+						self.bikeArray[x] = self.bikeArray[x-1]
+				
+				self.bikeArray[0] = [self.bikeArray[0][0]+self.speed, self.bikeArray[0][1]]
 
 	#Procedure for drawing the bike
 	def draw(self):
@@ -95,11 +95,12 @@ class Bike(object):
 
 		screen.delete(self.bikeLabel)
 
-		for i in range(len(self.bikeArray)):
-			if self.bikeArray[i]:
-				self.bikeParts[i] = screen.create_rectangle(self.bikeArray[i][0]-self.halfPieceSize, self.bikeArray[i][1]-self.halfPieceSize, self.bikeArray[i][0]+self.halfPieceSize, self.bikeArray[i][1]+self.halfPieceSize, fill=self.colour)
-		
-		self.bikeLabel = screen.create_text(self.bikeArray[0], text=str(self.playerNum), font=('Times New Roman', self.halfPieceSize*2), anchor='center')
+		if self.alive:
+			for i in range(len(self.bikeArray)):
+				if self.bikeArray[i]:
+					self.bikeParts[i] = screen.create_rectangle(self.bikeArray[i][0]-self.halfPieceSize, self.bikeArray[i][1]-self.halfPieceSize, self.bikeArray[i][0]+self.halfPieceSize, self.bikeArray[i][1]+self.halfPieceSize, fill=self.colour)
+			
+			self.bikeLabel = screen.create_text(self.bikeArray[0], text=str(self.playerNum), font=('Times New Roman', self.halfPieceSize*2), anchor='center')
 
 	#Procedure to check if the bike is dead
 	def checkDeath(self):
@@ -129,6 +130,7 @@ class Bike(object):
 			else:
 				screen.delete(self.bikeParts[i])
 		screen.delete(self.bikeLabel)
+		self.bikeArray = [None, None]
 
 	#Function to check if a bike has collided with another bike
 	def checkOtherBikeCollision(self, otherBike):
@@ -136,17 +138,10 @@ class Bike(object):
 			self.alive = False
 			deathOrder.append(self.playerNum)
 		elif self.bikeArray[0] == otherBike.bikeArray[0]:
-			if self.bikeArray.index(None) > otherBike.bikeArray.index(None):
-				otherBike.alive = False
-				deathOrder.append(otherBike.playerNum)
-			elif otherBike.bikeArray.index(None) > self.bikeArray.index(None):
-				self.alive = False
-				deathOrder.append(otherBike.playerNum)
-			elif otherBike.bikeArray.index(None) == self.bikeArray.index(None):
-				self.alive = False
-				deathOrder.append(self.playerNum)
-				otherBike.alive = False
-				deathOrder.append(otherBike.playerNum)
+			self.alive = False
+			deathOrder.append(self.playerNum)
+			otherBike.alive = False
+			deathOrder.append(otherBike.playerNum)
 		elif otherBike.bikeArray[0] in self.bikeArray[1:]:
 			otherBike.alive = False
 			deathOrder.append(otherBike.playerNum)
