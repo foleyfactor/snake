@@ -217,7 +217,7 @@ def checkGameState():
 
 #Procedure for creating the game over message (multiplayer)
 def gameOverMessage():
-	global deadBikes, arrayOfBikes, deathOrder
+	global deadBikes, arrayOfBikes, deathOrder, replayButton, gameOver
 	for i in range(len(arrayOfBikes)):
 		arrayOfBikes[i].kill()
 	screen.delete(deadBikes)
@@ -225,10 +225,14 @@ def gameOverMessage():
 		winningPlayer = [1,2,3,4]
 		for i in deathOrder:
 			winningPlayer.remove(i)
-		screen.create_text(screenWidth/2, screenHeight/2, font=("Courier", 18), text='This game\'s winner is: Player ' + str(winningPlayer[0]) + '!')
+		gameOver = screen.create_text(screenWidth/2, screenHeight/2, font=("Courier", 18), text='This game\'s winner is: Player ' + str(winningPlayer[0]) + '!')
 	elif tie:
 		tiedPlayers = 'Player ' + str(min(deathOrder[-1], deathOrder[-2])) + ', and Player ' + str(max(deathOrder[-1], deathOrder[-2]))
-		screen.create_text(screenWidth/2, screenHeight/2, font=("Courier", 18), text='This game\'s winners are: ' + tiedPlayers + '!')
+		gameOver = screen.create_text(screenWidth/2, screenHeight/2, font=("Courier", 18), text='This game\'s winners are: ' + tiedPlayers + '!')
+
+	replayButton = Button(screen, text='Play again', font=('Times New Roman', 16), command=replay)
+	replayButton.place(x=screenWidth/2, y=3*screenHeight/4, anchor='center')
+
 
 #Procedure for creating the game over message (single player)
 def onePlayerGameOver():
@@ -359,21 +363,31 @@ def keyPressHandler(event):
 # def mouseClicker(event):
 # 	print (event.x, event.y)
 
+def defineTkinter(passedMaster, passedScreen):
+	global master, screen
+	master = passedMaster
+	screen = passedScreen
+
+def replay():
+	global replayButton, gameOver
+	screen.delete(gameOver)
+	replayButton.destroy()
+	playATronGame()
+
 def playATronGame():
-	global screen
+	global screen, master
 	#Initializes the game's variables
 	setInitialVariables()
 
 	#Initializes the tkinter object and canvas
-	master = Tk()
+	#master = Tk()
 	master.bind('<Key>', keyPressHandler)
 	master.wm_title('Multiplayer Tron Battle')
 	#master.bind('<1>', mouseClicker)
-	screen = Canvas(master, width=screenWidth, height=screenHeight)
-	screen.pack()
-
-	screen.focus_set()
+	#screen = Canvas(master, width=screenWidth, height=screenHeight)
+	#screen.pack()
 
 	#Starts the menu screen after 0.5 seconds and then runs the screen until infinity (or the window is closed)
 	master.after(500, menuScreen())
+	screen.focus_set()
 	screen.mainloop()

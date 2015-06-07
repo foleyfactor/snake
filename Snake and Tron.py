@@ -23,7 +23,7 @@ def nextScreen(event):
 		choiceScreen()
 
 def choiceScreen():
-	global titlePhotoImage
+	global titlePhotoImage, tronChoiceButton, snakeChoiceButton
 	screen.delete(titlePhotoImage)
 	tronChoiceButton = Button(screen, text='Play  Tron', font=('Courier', 18), command=tronGame)
 	snakeChoiceButton = Button(screen, text='Play Snake', font=('Courier', 18), command=snakeGame)
@@ -31,14 +31,23 @@ def choiceScreen():
 	tronChoiceButton.place(x=2*840/3, y=672/2, anchor='center')
 	snakeChoiceButton.place(x=840/3, y=672/2, anchor='center')
 
+def buttonDestroy():
+	global tronChoiceButton, snakeChoiceButton
+	tronChoiceButton.destroy()
+	snakeChoiceButton.destroy()
+
 def tronGame():
-	global master
-	master.destroy()
+	global master, screen
+	#master.destroy()
+	buttonDestroy()
+	tron.defineTkinter(master, screen)
 	tron.playATronGame()
 
 def snakeGame():
-	global master
-	master.destroy()
+	global master, screen
+	#master.destroy()
+	buttonDestroy()
+	snake.defineTkinter(master, screen)
 	snake.playASnakeGame()
 
 titleScreen()
