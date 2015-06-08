@@ -6,7 +6,6 @@ from random import *
 def setInitialVariables():
 	global screenWidth, screenHeight, buttonChoice, arrayOfSnakes, gameRunning
 	global playerColoursArray, apple, deadSnakes, deathOrder, winner, tie, scoreText
-	global replayButton, gameOver
 	
 	screenWidth = 840
 	screenHeight = 672
@@ -470,17 +469,17 @@ def keyPressHandler(event):
 # 	print (event.x, event.y)
 
 def replay():
-	global gameOver, replayButton
+	global gameOver, replayButton, buttonChoice
 	screen.delete(gameOver)
 	replayButton.destroy()
-	playASnakeGame()
+	playASnakeGame(buttonChoice)
 
 def defineTkinter(passedMaster, passedScreen):
 	global master, screen
 	master = passedMaster
 	screen = passedScreen
 
-def playASnakeGame():
+def playASnakeGame(numPlayers=None):
 	global screen, master
 
 	#Initializes the game's variables
@@ -495,6 +494,17 @@ def playASnakeGame():
 	#screen.pack()
 
 	#Starts the menu screen after 0.5 seconds and then runs the screen until infinity (or the window is closed)
-	master.after(500, menuScreen())
+	if not numPlayers:
+		menuScreen()
+	else:
+		if numPlayers == 1:
+			buttonSet1()
+		elif numPlayers == 2:
+			buttonSet2()
+		elif numPlayers == 3:
+			buttonSet3()
+		else:
+			buttonSet4()
+
 	screen.focus_set()
 	screen.mainloop()

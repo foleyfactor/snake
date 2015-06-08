@@ -4,7 +4,8 @@ from random import *
 
 #Initialize all of the game's variables
 def setInitialVariables():
-	global screenWidth, screenHeight, buttonChoice, arrayOfBikes, gameRunning, playerColoursArray, deadBikes, deathOrder, winner, tie, scoreText
+	global screenWidth, screenHeight, buttonChoice, arrayOfBikes, gameRunning
+	global playerColoursArray, deadBikes, deathOrder, winner, tie, scoreText
 	
 	screenWidth = 840
 	screenHeight = 672
@@ -369,12 +370,12 @@ def defineTkinter(passedMaster, passedScreen):
 	screen = passedScreen
 
 def replay():
-	global replayButton, gameOver
+	global replayButton, gameOver, buttonChoice
 	screen.delete(gameOver)
 	replayButton.destroy()
-	playATronGame()
+	playATronGame(buttonChoice)
 
-def playATronGame():
+def playATronGame(numPlayers=None):
 	global screen, master
 	#Initializes the game's variables
 	setInitialVariables()
@@ -388,6 +389,15 @@ def playATronGame():
 	#screen.pack()
 
 	#Starts the menu screen after 0.5 seconds and then runs the screen until infinity (or the window is closed)
-	master.after(500, menuScreen())
+	if not numPlayers:
+		menuScreen()
+	else:
+		if numPlayers == 2:
+			buttonSet2()
+		elif numPlayers == 3:
+			buttonSet3()
+		else:
+			buttonSet4()
+
 	screen.focus_set()
 	screen.mainloop()
