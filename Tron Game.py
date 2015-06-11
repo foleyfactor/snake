@@ -28,6 +28,7 @@ class Bike(object):
 
 	#Initialize the bike's variables and position
 	def __init__(self, playerNum, totalPlayers):
+		self.label = str(playerNum)
 		self.bikeArray = [None]
 		self.bikeParts = [None]
 		self.direction = choice(['Up', 'Down', 'Left', 'Right'])
@@ -251,7 +252,7 @@ def countDown():
 		sleep(1)
 		screen.delete(count)
 	screen.delete(count)
-	count = screen.create_text(screenWidth/2, 50, text='GO!', font=('Times New Roman', 20), anchor='center')
+	count = screen.create_text(screenWidth/2, 50, text='GO!', font=('Times New Roman', 20), anchor='center', tags='go')
 
 #Game's main procedure, responsible for running all of the game's methods
 def runGame():
@@ -260,16 +261,15 @@ def runGame():
 	createBikes()
 	countDown()
 	goTimer = 10
-	if buttonChoice > 1:
-		while gameRunning:
-			updateBikePositions()
-			checkBikeCollisions()
-			checkGameState()
-			if goTimer == 0:
-				screen.delete(count)
-			goTimer -= 1
-			sleep(0.05)
-		gameOverMessage()
+	while gameRunning:
+		updateBikePositions()
+		checkBikeCollisions()
+		checkGameState()
+		if goTimer == 0:
+			screen.delete('go')
+		goTimer -= 1
+		sleep(0.05)
+	gameOverMessage()
 
 #Quits the game
 def quitGame():

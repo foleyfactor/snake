@@ -27,60 +27,79 @@ def setInitialVariables():
 #Class for the snakes
 class Snake(object):
 
-	#Initialize the snake's variables and position
+	#Initialize the snake's variables and position based on the number of total players and player number
 	def __init__(self, playerNum, totalPlayers):
 		self.snakeArray = [None]*50
 		self.snakeParts = [None]*50
 		self.direction = choice(['Up', 'Down', 'Left', 'Right'])
+
 		if totalPlayers > 1:
 			self.playerNum = playerNum
+		
 		else:
 			self.playerNum = ''
+		
 		self.colour = playerColoursArray[playerNum-1]
 		self.speed = 14
 		self.halfPieceSize = 7
 		self.alive = True
 		self.snakeLabel = None
+		
 		if totalPlayers == 1:
 			self.snakeArray[0] = [screenWidth/2-7, screenHeight/2-7]
+		
 		elif totalPlayers == 2:
 			self.snakeArray[0] = [playerNum*screenWidth/3-7, playerNum*screenHeight/3-7]
+		
 		elif totalPlayers == 4:
 			horizontalCoefficient = 2 - playerNum % 2
+		
 			if playerNum > 2:
 				verticalCoefficient = 2
+		
 			else:
 				verticalCoefficient = 1
 			self.snakeArray[0] = [horizontalCoefficient*screenWidth/3-7, verticalCoefficient*screenHeight/3-7]
+		
 		else:
 			if playerNum == 1:
 				self.snakeArray[0] = [screenWidth/2-7, screenHeight/3-7]
+		
 			else:
 				self.snakeArray[0] = [(playerNum-1)*screenWidth/3-7, 2*screenHeight/3-7]
 
 	#Move and update the snake's position based on its current direction
 	def updatePosition(self):
 		self.lastDirection = self.direction
+		
 		if self.direction == 'Up':
 			snakeLen = self.snakeArray.index(None)
+		
 			for i in range(snakeLen):
 				x = snakeLen-i-1
+		
 				if x:
 					self.snakeArray[x] = self.snakeArray[x-1]
+		
 			self.snakeArray[0] = [self.snakeArray[0][0], self.snakeArray[0][1]-self.speed]
 		
 		elif self.direction == 'Down':
 			snakeLen = self.snakeArray.index(None)
+		
 			for i in range(snakeLen):
 				x = snakeLen-i-1
+		
 				if x:
 					self.snakeArray[x] = self.snakeArray[x-1]
+		
 			self.snakeArray[0] = [self.snakeArray[0][0], self.snakeArray[0][1]+self.speed]
 		
 		elif self.direction == 'Left':
 			snakeLen = self.snakeArray.index(None)
+		
 			for i in range(snakeLen):
 				x = snakeLen-i-1
+		
 				if x:
 					self.snakeArray[x] = self.snakeArray[x-1]
 			
@@ -88,8 +107,10 @@ class Snake(object):
 		
 		elif self.direction == 'Right':
 			snakeLen = self.snakeArray.index(None)
+		
 			for i in range(snakeLen):
 				x = snakeLen-i-1
+		
 				if x:
 					self.snakeArray[x] = self.snakeArray[x-1]
 			
@@ -98,27 +119,33 @@ class Snake(object):
 	#Procedure for drawing the snake
 	def draw(self):
 		for i in range(len(self.snakeArray)):
+
 			if self.snakeArray[i] == None:
 				break
+		
 			else:
 				screen.delete(self.snakeParts[i])
+		
 		screen.delete(self.snakeLabel)
 
 		for i in range(len(self.snakeArray)):
+
 			if self.snakeArray[i] == None:
 				break
+
 			else:
 				self.snakeParts[i] = screen.create_rectangle(self.snakeArray[i][0]-self.halfPieceSize, self.snakeArray[i][1]-self.halfPieceSize, self.snakeArray[i][0]+self.halfPieceSize, self.snakeArray[i][1]+self.halfPieceSize, fill=self.colour)
 		
 		self.snakeLabel = screen.create_text(self.snakeArray[0], text=str(self.playerNum), font=('Times New Roman', self.halfPieceSize*2), anchor='center')
 
-	#Procedure to check if the snake is dead
+	#Check if the snake is dead
 	def checkDeath(self):
 
 		#Check if the snake has run into the wall
 		if self.snakeArray[0][0] - self.halfPieceSize < 0 or self.snakeArray[0][0] + self.halfPieceSize > screenWidth:
 			self.alive = False
 			deathOrder.append(self.playerNum)
+		
 		elif self.snakeArray[0][1] - self.halfPieceSize < 0 or self.snakeArray[0][1] + self.halfPieceSize > screenHeight:
 			self.alive = False
 			deathOrder.append(self.playerNum)
@@ -131,7 +158,7 @@ class Snake(object):
 		if not self.alive:
 			self.kill()
 
-	#Procedure to kill the snake and delete its parts
+	#Kill the snake and delete its parts
 	def kill(self):
 		self.alive = False
 		for i in range(len(self.snakeArray)):
@@ -141,7 +168,7 @@ class Snake(object):
 				screen.delete(self.snakeParts[i])
 		screen.delete(self.snakeLabel)
 
-	#Function to check if a snake has collided with another snake
+	#Check if a snake has collided with another snake
 	def checkOtherSnakeCollision(self, otherSnake):
 		if self.snakeArray[0] in otherSnake.snakeArray[1:]:
 			self.alive = False
