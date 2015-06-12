@@ -4,7 +4,7 @@ from random import *
 
 #Initialize all of the game's variables
 def setInitialVariables():
-	global screenWidth, screenHeight, buttonChoice, arrayOfSnakes, gameRunning
+	global screenWidth, screenHeight, buttonChoice, arrayOfSnakes, gameRunning, appleImage
 	global playerColoursArray, apple, deadSnakes, deathOrder, winner, tie, scoreText
 	
 	screenWidth = 840
@@ -23,6 +23,8 @@ def setInitialVariables():
 	
 	scoreText = None
 	deadSnakes = None
+
+	appleImage = PhotoImage(file='./appleNew.gif')
 
 #Class for the snakes
 class Snake(object):
@@ -219,8 +221,9 @@ class Apple(object):
 
 	#Procedure for drawing the apple
 	def draw(self):
+		global appleImage
 		screen.delete(self.apple)
-		self.apple = screen.create_rectangle(self.position[0]-7, self.position[1]-7, self.position[0]+7, self.position[1]+7, fill='orange')		#screen.create_image(image=appleImage)
+		self.apple = screen.create_image(self.position, image=appleImage)
 		screen.update()
 
 	#Procedure called when the apple is hit
