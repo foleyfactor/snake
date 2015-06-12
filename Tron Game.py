@@ -306,7 +306,6 @@ def gameOverMessage():
 #Counts down before the game begins
 def countDown():
 	global count
-	count = None
 
 	#Count down from 3 to 1
 	for i in range(3):
@@ -445,9 +444,6 @@ def keyPressHandler(event):
 		elif event.keysym == 'j':
 			if arrayOfBikes[3].lastDirection != 'Right':
 				arrayOfBikes[3].direction = 'Left'
-
-# def mouseClicker(event):
-# 	print (event.x, event.y)
 
 #Takes the tkinter objects from the 'Snake and Tron' program
 def defineTkinter(passedMaster, passedScreen):
