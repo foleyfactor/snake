@@ -1,18 +1,30 @@
 from tkinter import *
 from time import *
 from random import *
+from configparser import *
 
 #Initialize all of the game's variables
 def setInitialVariables():
 	global screenWidth, screenHeight, buttonChoice, arrayOfBikes, gameRunning
 	global playerColoursArray, deadBikes, deathOrder, winner, tie
 	
+	#Allows values to be taken from the config file
+	parser = RawConfigParser()
+	configFilePath = './config.cfg'
+
+	#Pull settings from config file
+	parser.read(configFilePath)
+	player1Colour = parser.get('general', 'Player_1_Colour')
+	player2Colour = parser.get('general', 'Player_2_Colour')
+	player3Colour = parser.get('general', 'Player_3_Colour')
+	player4Colour = parser.get('general', 'Player_4_Colour')
+
 	screenWidth = 840
 	screenHeight = 672
 
 	gameRunning = True
 
-	playerColoursArray = ['blue', 'red', 'green', 'yellow']
+	playerColoursArray = [player1Colour, player2Colour, player3Colour, player4Colour]
 	arrayOfBikes = []
 	buttonChoice = 0
 
