@@ -96,8 +96,9 @@ def backAScreen():
 def writeConfig():
 	global entryBox, parser, configFilePath
 	parameter, value = entryBox.get().strip(' ').split('=')
+	parser.read(configFilePath)
 	parser.set('general', parameter, value)
-	with open('./config.cfg', mode='w') as config:
+	with open('./config.cfg', mode='w+') as config:
 		parser.write(config)
 
 
