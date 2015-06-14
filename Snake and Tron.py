@@ -20,7 +20,7 @@ def titleScreen():
 	currentScreen = 0
 
 	#Allows read/write to Config file
-	parser = RawConfigParser()
+	parser = ConfigParser()
 	configFilePath = './config.cfg'
 
 	#Pull settings from config file
@@ -95,11 +95,12 @@ def backAScreen():
 
 def writeConfig():
 	global entryBox, parser, configFilePath
-	parameter, value = entryBox.get().strip(' ').split('=')
-	parser.read(configFilePath)
+	parameter, value = entryBox.get().split('=')
+	parameter = parameter.replace(' ','')
+	value = value.replace(' ', '')
 	parser.set('general', parameter, value)
-	with open('./config.cfg', mode='w+') as config:
-		parser.write(config)
+	with open('./config.cfg', mode='w+') as configFile:
+		parser.write(configFile)
 
 
 #Destroys the buttons forever
