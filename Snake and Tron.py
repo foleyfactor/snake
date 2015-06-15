@@ -45,6 +45,9 @@ def titleScreen():
 #Transitions between title and menu screens
 def nextScreen(event):
 	global currentScreen
+	if event.keysym == 'Escape':
+		master.destroy()
+
 	if currentScreen == 0:
 		currentScreen = 1
 		choiceScreen()
@@ -72,6 +75,7 @@ def choiceScreen(fromOptions=False):
 		backButton.destroy()
 		screen.delete(warningText)
 
+#Options menu
 def optionsScreen():
 	global writeButton, entryBox, warningText, outlineColour, backButton, warningText
 	buttonDestroy()
@@ -82,6 +86,7 @@ def optionsScreen():
 										+ '        colour, where playerNum is the number of the player you want to change.\n\n'
 										+ 'To apply, press write (For background colour to update: close and re-run the game).', font=('Courier', 12))
 
+	#Buttons and text box
 	entryBox = Entry(screen, width=30, font=('Courier', 16))
 	writeButton = Button(screen, text='Write', font=('Courier', 12), command=writeConfig)
 	backButton = Button(screen, text='Back', font=('Courier', 16), command=backAScreen)
@@ -90,9 +95,11 @@ def optionsScreen():
 	writeButton.place(x=2*840/3, y=672/2, anchor='w')
 	backButton.place(x=840/2, y=2*672/3, anchor='center')
 
+#Allows transition from options back to main menu
 def backAScreen():
 	choiceScreen(True)
 
+#Updates the config.cfg file to allow user to change settings
 def writeConfig():
 	global entryBox, parser, configFilePath
 	parameter, value = entryBox.get().split('=')

@@ -9,7 +9,7 @@ def setInitialVariables():
 	global playerColoursArray, deadBikes, deathOrder, winner, tie
 	
 	#Allows values to be taken from the config file
-	parser = RawConfigParser()
+	parser = ConfigParser()
 	configFilePath = './config.cfg'
 
 	#Pull settings from config file
