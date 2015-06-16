@@ -1,10 +1,10 @@
-#==========================================#
-#                                          #
-# Multiplayer Snake & Tron Games           #
-# By: Alex Foley                           #
-# Code Written From May 29 - June 15, 2015 #
-#                                          #
-#==========================================#
+#===============================================#
+#                                               #
+# Multiplayer Snake & Tron Games (Main Module)  #
+# By: Alex Foley                                #
+# Code Written From May 29 - June 15, 2015      #
+#                                               #
+#===============================================#
 
 #Imports
 from tkinter import *
@@ -81,10 +81,10 @@ def optionsScreen():
 	buttonDestroy()
 
 	warningText = screen.create_text(840/2, 100, text='Warning: updating the config values could cause the game to crash\n\n' 
-										+ 'To update background, type "Background_Colour = "and add your desired colour\n\n'
-										+ 'To update a player colour, type "Player_playerNum_Colour = " and add your desired\n'
-										+ '        colour, where playerNum is the number of the player you want to change.\n\n'
-										+ 'To apply, press write (For background colour to update: close and re-run the game).', font=('Courier', 12))
+													+ 'To update background, type "Background_Colour = "and add your desired colour\n\n'
+													+ 'To update a player colour, type "Player_playerNum_Colour = " and add your desired\n'
+													+ '        colour, where playerNum is the number of the player you want to change.\n\n'
+													+ 'To apply, press write (for background colour to update: close and re-run the game).', font=('Courier', 12))
 
 	#Buttons and text box
 	entryBox = Entry(screen, width=30, font=('Courier', 16))

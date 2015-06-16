@@ -1,3 +1,11 @@
+#================================================#
+#                                                #
+# Multiplayer Snake & Tron Games (Snake Module)  #
+# By: Alex Foley                                 #
+# Code Written From May 29 - June 15, 2015       #
+#                                                #
+#================================================#
+
 from tkinter import *
 from time import *
 from random import *
