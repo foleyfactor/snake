@@ -6,6 +6,7 @@
 #                                               #
 #===============================================#
 
+#Imports
 from tkinter import *
 from time import *
 from random import *
